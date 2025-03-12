@@ -62,19 +62,22 @@ def main():
         {"id": "vector10", "text": "Using vector databases has improved my workflow"}
     ]
 
-    # Create embeddings for these sentences as follows:
     vector_data = []
-
+    # Create embeddings for each sentence
     for sentence in sentences_to_index:
+        # Create the embedding
         embedding = model.encode(sentence["text"])
         print(f"embedding:{embedding}")
+        # Store the embedding in a dictionary with the sentence ID and metadata
         vector_info = {"id": sentence["id"], "values": embedding.tolist(), "metadata": {"sentence": sentence["text"]}}
         print(f"vector_info:{vector_info}")
-
+        # Add the dictionary to the list of vectors
         vector_data.append(vector_info)
     print(f"vector_data:{vector_data}")
+
     # Get index
     index = pc.Index(index_name)
+    # Save the embeddings (with metadata) in the index
     upsert_result =index.upsert(vectors=vector_data, namespace="example-namespace")
     print(f"upsert_result:{upsert_result}")
 
